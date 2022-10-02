@@ -40,6 +40,11 @@ function assignPlayerCodes(){
 	}
 }
 
+//// Report Bot is Up
+client.on('ready', () => {
+	console.log(`Logged in as ${client.user.tag}!`);
+	});
+
 //// Handle Commands
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isChatInputCommand()) return;
