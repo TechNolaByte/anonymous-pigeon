@@ -3,7 +3,9 @@ To run for your own server, edit auth.json to contain the following three parame
 - "clientId" : Your bot's APPLICATION ID.
 - "guildId" : Your server's DISCORD ID.
 
-invite link: https://discord.com/api/oauth2/authorize?client_id=1017946076784906392&permissions=2147560448&scope=bot
+Afterwards, run the `update command structure.bat` file.
+
+Invite link: https://discord.com/api/oauth2/authorize?client_id=1017946076784906392&permissions=2147560448&scope=bot
 
 Admin permissions to control the bot rely on you having any role named "Narrator" or "admin".
 Admins have access to the following commands:
@@ -19,6 +21,8 @@ Regular users who have been listed as Players have access to the following comma
 /anon <message> (sends a message anonymously)
 
 To-Do List:
+- Rename Commands.
+- Implement Help Command.
 - Allow Players to set an alias, then type messages afterwards. That way they won't have to specify an alias with every message.
 - Implement autosave functionality.
 - Allow the Narrator to easily add or subtract Players from the Player List.
