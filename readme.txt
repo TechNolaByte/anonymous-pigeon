@@ -21,7 +21,7 @@ Regular users who have been listed as Players have access to the following comma
 /anon <message> (sends a message anonymously)
 
 To-Do List:
-- Implement autosave functionality.
 - Allow Narrator to see Player Names with `/view-ids`.
 - Allow Players to set an alias, then type messages afterwards. That way they won't have to specify an alias with every message.
+- Implement autosave functionality.
 - Allow the Narrator to easily add or subtract Players from the Player List.
