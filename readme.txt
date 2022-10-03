@@ -21,7 +21,6 @@ Regular users who have been listed as Players have access to the following comma
 /anon <message> (sends a message anonymously)
 
 To-Do List:
-- Rename Commands.
 - Implement Help Command.
 - Allow Players to set an alias, then type messages afterwards. That way they won't have to specify an alias with every message.
 - Implement autosave functionality.

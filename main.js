@@ -95,15 +95,15 @@ client.on('interactionCreate', async interaction => {
 	
 	// Remaining commands only for narrators
 	if(!isNarrator(interaction.guild, interaction.user.id))
-		return interaction.reply({ content: "This command is only available to narrators.", ephemeral: true });
+		return interaction.reply({ content: "This command is only available to Narrators.", ephemeral: true });
 	
 	switch (interaction.commandName){
-		case 'shuffle-ids':
+		case 'anon-shuffle-ids':
 			assignPlayerCodes();
 			interaction.reply({ content: "Anonymous ids have been shuffled for everyone.", ephemeral: true });
 		break;
 		
-		case 'view-ids':
+		case 'anon-view-ids':
 			var output = "Player IDs:\n";
 			// For all players
 			for (const player in global.players) if (global.players.hasOwnProperty(player)){
@@ -113,7 +113,7 @@ client.on('interactionCreate', async interaction => {
 			interaction.reply({ content: output, ephemeral: true });
 		break;
 		
-		case 'set-players':
+		case 'anon-set-players':
 			// Clear old list
 			global.players = {};
 			
@@ -128,7 +128,7 @@ client.on('interactionCreate', async interaction => {
 			interaction.reply({ content: "Player list updated.", ephemeral: true });
 		break;
 		
-		case 'save':
+		case 'anon-save':
 			// Convert to stream
 			const stream = new Readable();
 			stream._read = () => {};
@@ -146,7 +146,7 @@ client.on('interactionCreate', async interaction => {
 			interaction.reply({ content: "Bot state has been saved.", ephemeral: false,  files: [attachment]});
 		break;
 		
-		case 'load':
+		case 'anon-load':
 			var attachment = interaction.options.getAttachment('attachment');
 			if(Object.prototype.toString.call(attachment) !== '[object Object]' || attachment.url === undefined) return interaction.reply({ content: "ERROR - Failed to load attachment into string.", ephemeral: true });
 			

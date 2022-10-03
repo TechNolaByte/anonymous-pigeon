@@ -4,25 +4,25 @@ const { clientId, guildId, token } = require('./auth.json');
 
 const commands = [
 	new SlashCommandBuilder()
-		.setName('shuffle-ids')
+		.setName('anon-shuffle-ids')
 		.setDescription('Randomizes everyone\'s anon ids'),
 		
 	new SlashCommandBuilder()
-		.setName('view-ids')
+		.setName('anon-view-ids')
 		.setDescription('View everyone\'s anon ids'),
 		
 	new SlashCommandBuilder()
-		.setName('save')
+		.setName('anon-save')
 		.setDescription('Save state to file'),
 		
 	new SlashCommandBuilder()
-		.setName('load')
+		.setName('anon-load')
 		.setDescription('Load state from file')
 		.addAttachmentOption(option => option.setName('attachment').setDescription('Select a previous bot save file to upload.')
 		.setRequired(true)),
 		
 	new SlashCommandBuilder()
-		.setName('set-players')
+		.setName('anon-set-players')
 		.setDescription('Sets a list of all players who may use /anon (this will also shuffle everyones\' ids)')
 		.addStringOption(option =>
 			option.setName('player_list')
