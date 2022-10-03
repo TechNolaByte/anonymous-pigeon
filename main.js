@@ -32,11 +32,14 @@ function assignPlayerCodes(){
 	// For all players
 	for (const player in global.players) if (global.players.hasOwnProperty(player)){
 		// Generates a list of unique ids for this player to choose from
-		let ids = [];
-		for(let i = 0; i < global.maxIdsPerPlayer; i++) ids.push(nextCode());
+		let tmp_ids = [];
+		for(let i = 0; i < global.maxIdsPerPlayer; i++) tmp_ids.push(nextCode());
 		
-		global.players[player] = ids;
-		console.log("Set player ("+player+") id options to: " + ids);
+		global.players[player] = {
+			current_anon: 0,
+			ids: tmp_ids
+		};
+		console.log("Set player ("+player+") id options to: " + tmp_ids);
 	}
 }
 
@@ -72,7 +75,7 @@ client.on('interactionCreate', async interaction => {
 				options.push(
 					new ButtonBuilder()
 						.setCustomId(''+i)
-						.setLabel(global.players[discordUser][i])
+						.setLabel(global.players[discordUser].ids[i])
 						.setStyle(ButtonStyle.Primary)
 				);
 			}
@@ -96,10 +99,12 @@ client.on('interactionCreate', async interaction => {
 		case 'anon-help':
 			interaction.reply({ content: "Use `/anon <message>` then select which alias to use.", ephemeral: true });
 		return;
-
+		
+		/*
 		case 'anon-quick':
 
 		return;
+		//*/
 	}
 
 	
@@ -133,7 +138,7 @@ client.on('interactionCreate', async interaction => {
 			playerList = playerListRaw.replace(/[^0-9\ ]/g, "").split(" ");
 			
 			// Populate player list
-			for(var i = 0; i < playerList.length; i++) global.players[playerList[i]] = [];
+			for(var i = 0; i < playerList.length; i++) global.players[playerList[i]] = {};
 			assignPlayerCodes();
 			
 			interaction.reply({ content: "Player list updated.", ephemeral: true });
@@ -195,7 +200,7 @@ client.on('interactionCreate', async interaction => {
 	
 	// Get prefix
 	var prefix = "";
-	if(global.userIdentifiers && selectedIndex >= 0) prefix = `** ${global.players[discordUser][selectedIndex]} Anon**: `;
+	if(global.userIdentifiers && selectedIndex >= 0) prefix = `** ${global.players[discordUser].ids[selectedIndex]} Anon**: `;
 
 	await interaction.deferUpdate();
 	
