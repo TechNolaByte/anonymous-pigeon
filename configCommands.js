@@ -43,7 +43,11 @@ const commands = [
 
 	new SlashCommandBuilder()
 		.setName('anon-help')
-		.setDescription('Show bot usage.')
+		.setDescription('Show bot usage.'),
+
+	new SlashCommandBuilder()
+		.setName('anon-quick')
+		.setDescription('Sends an anonymous message in the current channel using your last alias.')
 				
 ]	.map(command => command.toJSON());
 

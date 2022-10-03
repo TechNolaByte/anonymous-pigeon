@@ -53,45 +53,56 @@ client.on('interactionCreate', async interaction => {
 	discordUser = interaction.user.id;
 	console.log(discordUser + " — " + interaction.user.username + "#" + interaction.user.discriminator);
 	
-	if (interaction.commandName === 'anon'){
-		if(global.players[discordUser] === undefined) return interaction.reply({ content: 'Only players may send anonymous messages.', ephemeral: true});
-		
-		const id = interaction.options.getChannel('destination') || interaction.channelId;
-		const channel = client.channels.cache.get(''+id);
-		const message = interaction.options.getString('message');
-
-		// Prompt player to select an identity
-		options = [
-			new ButtonBuilder()
-				.setCustomId('no_id')
-				.setLabel("No Anon ID")
-				.setStyle(ButtonStyle.Secondary)
-		];
-		for(var i = 0; i < global.maxIdsPerPlayer; i++){
-			options.push(
-				new ButtonBuilder()
-					.setCustomId(''+i)
-					.setLabel(global.players[discordUser][i])
-					.setStyle(ButtonStyle.Primary)
-			);
-		}
-		
-		const identities = new ActionRowBuilder()
-			.addComponents(...options);
+	switch (interaction.commandName){
+		case 'anon':
+			if(global.players[discordUser] === undefined) return interaction.reply({ content: 'Only players may send anonymous messages.', ephemeral: true});
 			
-		await interaction.reply({ content: 'Send message ```'+message+'``` to channel ``'+channel.name+'`` as what identity?', components: [identities], ephemeral: true});
-		
-		// Record message and destination for use later when player selects and identity
-		// (currently no time out, so this is a memory leak, but probably not worth the effort of fixing
-		var botReply = await interaction.fetchReply();
-		messageID = await botReply.id;
-		
-		console.log(message)
-		console.log(channel.name)
-		commandCache[messageID] = {message: message, channel: channel};
-		
+			const id = interaction.options.getChannel('destination') || interaction.channelId;
+			const channel = client.channels.cache.get(''+id);
+			const message = interaction.options.getString('message');
+
+			// Prompt player to select an identity
+			options = [
+				new ButtonBuilder()
+					.setCustomId('no_id')
+					.setLabel("No Anon ID")
+					.setStyle(ButtonStyle.Secondary)
+			];
+			for(var i = 0; i < global.maxIdsPerPlayer; i++){
+				options.push(
+					new ButtonBuilder()
+						.setCustomId(''+i)
+						.setLabel(global.players[discordUser][i])
+						.setStyle(ButtonStyle.Primary)
+				);
+			}
+			
+			const identities = new ActionRowBuilder()
+				.addComponents(...options);
+				
+			await interaction.reply({ content: 'Send message ```'+message+'``` to channel ``'+channel.name+'`` as what identity?', components: [identities], ephemeral: true});
+			
+			// Record message and destination for use later when player selects and identity
+			// (currently no time out, so this is a memory leak, but probably not worth the effort of fixing
+			var botReply = await interaction.fetchReply();
+			messageID = await botReply.id;
+			
+			console.log(message)
+			console.log(channel.name)
+			commandCache[messageID] = {message: message, channel: channel};
+			
+		return;
+
+		case 'anon-help':
+			interaction.reply({ content: "Use `/anon <message>` then select which alias to use.", ephemeral: true });
+		return;
+
+		case 'anon-quick':
+
 		return;
 	}
+
+	
 	
 	// Remaining commands only for narrators
 	if(!isNarrator(interaction.guild, interaction.user.id))
@@ -168,9 +179,6 @@ client.on('interactionCreate', async interaction => {
 			if(!fail) interaction.reply({ content: "Bot state has been loaded from file.", ephemeral: true });
 		break;
 
-		case 'anon-help':
-			interaction.reply({ content: "Use `/anon <message>` then select which alias to use.", ephemeral: true });
-		break;
 	}
 });
 
