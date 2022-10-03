@@ -167,6 +167,10 @@ client.on('interactionCreate', async interaction => {
 			
 			if(!fail) interaction.reply({ content: "Bot state has been loaded from file.", ephemeral: true });
 		break;
+
+		case 'anon-help':
+			interaction.reply({ content: "Use `/anon <message>` then select which alias to use.", ephemeral: true });
+		break;
 	}
 });
 

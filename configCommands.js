@@ -39,7 +39,11 @@ const commands = [
 		.addChannelOption(option =>
 			option.setName('destination')
 				.setDescription('The channel to send it to.')
-				.setRequired(false))
+				.setRequired(false)),
+
+	new SlashCommandBuilder()
+		.setName('anon-help')
+		.setDescription('Show bot usage.')
 				
 ]	.map(command => command.toJSON());
 
