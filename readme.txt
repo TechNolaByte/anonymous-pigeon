@@ -25,3 +25,7 @@ To-Do List:
 - Allow Players to set an alias, then type messages afterwards. That way they won't have to specify an alias with every message.
 - Implement autosave functionality.
 - Allow the Narrator to easily add or subtract Players from the Player List.
+
+Known Issues:
+- A crash once occurred, possibly caused by overload.
+- Bot allows people to send anonymous messages in chat rooms they otherwise are only spectating in.

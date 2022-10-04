@@ -123,7 +123,7 @@ client.on('interactionCreate', async interaction => {
 			var output = "Player IDs:\n";
 			// For all players
 			for (const player in global.players) if (global.players.hasOwnProperty(player)){
-				output += player+": ["+global.players[player]+"]\n";
+				output += player+": ["+global.players[player].ids+"]\n";
 			}
 
 			interaction.reply({ content: output, ephemeral: true });
