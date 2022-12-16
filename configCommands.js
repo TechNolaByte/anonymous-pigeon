@@ -44,6 +44,16 @@ const commands = [
 	new SlashCommandBuilder()
 		.setName('anon-help')
 		.setDescription('Show bot usage.'),
+	
+	//*
+	new SlashCommandBuilder()
+		.setName('anon-duplicate')
+		.setDescription('Create a duplicate of another Player\'s Anon.')
+		.addStringOption(option =>
+			option.setName('anon-name')
+				.setDescription('The name of the Anon to Duplicate.')
+				.setRequired(true)),
+	//*/
 
 	/*
 	new SlashCommandBuilder()

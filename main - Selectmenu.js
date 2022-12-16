@@ -9,7 +9,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 commandCache = {};
 
 global = {
-	maxIdsPerPlayer: 5,
+	startIdsPerPlayer: 5,
 	userIdentifiers: true,
 	masterSeed: 0,
 	players: {
@@ -25,7 +25,7 @@ function shuffleAllIDs(){
 			
 			// Generates a list of unique ids for this player to choose from
 			let ids = [];
-			for(let i = 0; i < global.maxIdsPerPlayer; i++) ids.push(generateID(player, i));
+			for(let i = 0; i < global.startIdsPerPlayer; i++) ids.push(generateID(player, i));
 			
 			global.players[player] = ids;
 			console.log("Set player ("+player+") id options to: " + JSON.stringify(ids));
@@ -35,7 +35,7 @@ function shuffleAllIDs(){
 
 
 function generateID(discordUser, idIndex = 0){
-	if(idIndex > global.maxIdsPerPlayer) idIndex = global.maxIdsPerPlayer;
+	if(idIndex > global.startIdsPerPlayer) idIndex = global.startIdsPerPlayer;
 		
 	// Get seed unique to player, index, and last reshuffle time
 	let incID = global.masterSeed + '' + idIndex + '' + discordUser;
@@ -54,7 +54,7 @@ function generateID(discordUser, idIndex = 0){
 function getPrefix(discordUser, idIndex){
 	if(!global.userIdentifiers || idIndex < 0) return "";
 
-	if(idIndex > global.maxIdsPerPlayer) idIndex = global.maxIdsPerPlayer;
+	if(idIndex > global.startIdsPerPlayer) idIndex = global.startIdsPerPlayer;
 	
 	return "**Anon#" + global.players[discordUser][idIndex] + "**: ";
 }
@@ -80,7 +80,7 @@ client.on('interactionCreate', async interaction => {
 			description: 'Message will be untraceable.',
 			value: 'no_id',
 		}];
-		for(var i = 0; i < global.maxIdsPerPlayer; i++){
+		for(var i = 0; i < global.startIdsPerPlayer; i++){
 			options.push({
 				label: "#"+global.players[discordUser][i],
 				value: ''+i,

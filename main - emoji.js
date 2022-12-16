@@ -16,7 +16,7 @@ saveFile = () => fs.writeFile("./saves/"+Date.now(), JSON.stringify(global), fun
 commandCache = {};
 
 global = {
-	maxIdsPerPlayer: 4,
+	startIdsPerPlayer: 4,
 	userIdentifiers: true,
 	masterSeed: primeSeed,
 	timesShuffled: 0,
@@ -82,7 +82,7 @@ function assignPlayerCodes(){
 	for (const player in global.players) if (global.players.hasOwnProperty(player)){
 		// Generates a list of unique ids for this player to choose from
 		let ids = [];
-		for(let i = 0; i < global.maxIdsPerPlayer; i++) ids.push(nextCode());
+		for(let i = 0; i < global.startIdsPerPlayer; i++) ids.push(nextCode());
 		
 		global.players[player] = ids;
 		console.log("Set player ("+player+") id options to: " + ids);
@@ -92,7 +92,7 @@ function assignPlayerCodes(){
 function getPrefix(discordUser, idIndex){
 	if(!global.userIdentifiers || idIndex < 0) return "";
 
-	if(idIndex > global.maxIdsPerPlayer) idIndex = global.maxIdsPerPlayer;
+	if(idIndex > global.startIdsPerPlayer) idIndex = global.startIdsPerPlayer;
 	
 	return "**Anon" + global.players[discordUser][idIndex] + "**: ";
 }
@@ -119,7 +119,7 @@ client.on('interactionCreate', async interaction => {
 				.setLabel("No Anon ID")
 				.setStyle(ButtonStyle.Secondary)
 		];
-		for(var i = 0; i < global.maxIdsPerPlayer; i++){
+		for(var i = 0; i < global.startIdsPerPlayer; i++){
 			options.push(
 				new ButtonBuilder()
 					.setCustomId(''+i)

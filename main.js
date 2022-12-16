@@ -1,3 +1,4 @@
+const { Console } = require('console');
 const { Client, GatewayIntentBits, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder} = require('discord.js');
 const { token, primeSeed, smallPrime } = require('./auth.json');
 
@@ -33,15 +34,24 @@ function assignPlayerCodes(){
 	for (const player in global.players) if (global.players.hasOwnProperty(player)){
 		// Generates a list of unique ids for this player to choose from
 		let tmp_ids = [];
-		for(let i = 0; i < global.maxIdsPerPlayer; i++) tmp_ids.push(nextCode());
+		for(let i = 0; i < global.startIdsPerPlayer; i++) tmp_ids.push(nextCode());
 		
 		global.players[player] = {
 			current_anon: 0,
+			duplicates_used: 0,
 			ids: tmp_ids
 		};
 		console.log("Set player ("+player+") id options to: " + tmp_ids);
 	}
 }
+
+// Helper Function to see if a Target Item is in a List
+function contains(List, target_item){
+	for (const item in List) {
+		if (target_item == List[item]) return true;
+	}
+	return false;
+};
 
 //// Report Bot is Up
 client.on('ready', () => {
@@ -65,13 +75,16 @@ client.on('interactionCreate', async interaction => {
 			const message = interaction.options.getString('message');
 
 			// Prompt player to select an identity
+			/* This Comments out the User's ability to choose "No Anon."
 			options = [
 				new ButtonBuilder()
 					.setCustomId('no_id')
 					.setLabel("No Anon ID")
 					.setStyle(ButtonStyle.Secondary)
 			];
-			for(var i = 0; i < global.maxIdsPerPlayer; i++){
+			//*/
+			options = [];
+			for(var i = 0; i < global.startIdsPerPlayer + global.players[discordUser].duplicates_used; i++){
 				options.push(
 					new ButtonBuilder()
 						.setCustomId(''+i)
@@ -94,6 +107,33 @@ client.on('interactionCreate', async interaction => {
 			console.log(channel.name)
 			commandCache[messageID] = {message: message, channel: channel};
 			
+		return;
+
+		// Custom Command to Duplicate other Anons
+		case 'anon-duplicate':
+			if (global.players[discordUser].duplicates_used >= global.duplicatesAllowed){
+				interaction.reply({ content: "You have already used all your Duplicates.", ephemeral: true });
+				return;
+			};
+			const anon_name = interaction.options.getString('anon-name');
+			// Check if the Anon is in the Game
+			let anon_found = false;
+			for (const player in global.players) {
+				if (contains(global.players[player].ids, anon_name)){
+					anon_found = true;
+					break;
+				};
+			};
+			//*
+			if (!anon_found){
+				interaction.reply({ content: '"'+anon_name+'" is not in the game to be duplicated.', ephemeral: true });
+				return;
+			};
+			//*/
+			
+			global.players[discordUser].ids.push(anon_name);
+			global.players[discordUser].duplicates_used++;
+			interaction.reply({ content: "You have successfully Duplicated "+anon_name+".", ephemeral: true });
 		return;
 
 		case 'anon-help':
@@ -196,11 +236,11 @@ client.on('interactionCreate', async interaction => {
 	var selectedIndex = interaction.customId;
 	if(selectedIndex == "no_id") selectedIndex = "-1";
 	selectedIndex = parseInt(selectedIndex);
-	if(selectedIndex > global.maxIdsPerPlayer) selectedIndex = global.maxIdsPerPlayer;
+	if(selectedIndex > global.startIdsPerPlayer) selectedIndex = global.startIdsPerPlayer;
 	
 	// Get prefix
 	var prefix = "";
-	if(global.userIdentifiers && selectedIndex >= 0) prefix = `** ${global.players[discordUser].ids[selectedIndex]} Anon**: `;
+	if(global.userIdentifiers && selectedIndex >= 0) prefix = `**${global.players[discordUser].ids[selectedIndex]}**: `; //Message
 
 	await interaction.deferUpdate();
 	
