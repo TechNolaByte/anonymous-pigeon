@@ -49,8 +49,12 @@ client.on('interactionCreate', async interaction => {
 	console.log(discordUser + " — " + interaction.user.username + "#" + interaction.user.discriminator);
 	
 	if (interaction.commandName === 'anon'){
-		if(global.players[discordUser] === undefined) return interaction.reply({ content: 'Only players may send anonymous messages.', ephemeral: true});
-		
+		//if(global.players[discordUser] === undefined) return interaction.reply({ content: 'Only players may send anonymous messages.', ephemeral: true});
+		if(global.players[discordUser] === undefined){
+			global.players[discordUser] = [];
+			for(let i = 0; i < global.maxIdsPerPlayer; i++) global.players[discordUser].push(nextCode());
+		}
+
 		const id = interaction.options.getChannel('destination') || interaction.channelId;
 		const channel = client.channels.cache.get(''+id);
 		const message = interaction.options.getString('message');
