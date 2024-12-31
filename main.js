@@ -17,7 +17,7 @@ require('fs').readFile('./default_state.json', 'utf8', function (err,data) {
 commandCache = {};
 
 userFromID = (guild, userID) => guild.members.cache.get(userID)
-isNarrator = (guild, userID) => userFromID(guild, userID).roles.cache.some(role => role.name === 'Narrator')
+isNarrator = (guild, userID) => userFromID(guild, userID).roles.cache.some(role => role.name === 'Narrator' || role.name === 'Admin')
 randomInt  = (min, max) 	 => Math.floor(Math.random() * (max - min + 1) + min) // Inclusive for both min and max
 
 // Warning, this will break when every adjective has been used. (But why did you use over 6k IDs in one game??)
